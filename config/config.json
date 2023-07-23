@@ -1,4 +1,7 @@
 {
-    "messageLoggerChannelId": "1085810795696357446"
-    
+  "messageLoggerChannelId": "1085810795696357446",
+  "status": "Dnd",
+  "presenceName": "Alice",
+  "presenceType": "Streaming",
+  "url": "https://www.youtube.com/watch?v=w3rStCFEWgk"
 }
