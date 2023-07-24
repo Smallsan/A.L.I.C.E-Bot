@@ -1,7 +1,12 @@
 {
+  "isChannelMessageLoggerEnabled": true,
+  "isLocalMessageLoggerEnabled": true,
+  "isStalkerEnabled": true,
   "messageLoggerChannelId": "1085810795696357446",
   "status": "Dnd",
   "presenceName": "Alice",
   "presenceType": "Streaming",
-  "url": "https://www.youtube.com/watch?v=w3rStCFEWgk"
+  "url": "https://www.youtube.com/watch?v=w3rStCFEWgk",
+  "stalkerId": "509683395224141827",
+  "ownerId": "218119227142438914"
 }
