@@ -1,6 +1,26 @@
 const fs = require('fs')
 const axios = require('axios')
 const config = require('../config/config.json')
+const zlib = require('zlib')
+
+function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
+  return new Promise((resolve, reject) => {
+    const inputStream = fs.createReadStream(inputFilePath)
+    const outputStream = fs.createWriteStream(outputFilePath)
+    // 0-9 compression level, 9 is highest, 0 is none
+    const gzip = zlib.createGzip({ level: compressionLevel })
+
+    inputStream.pipe(gzip).pipe(outputStream)
+
+    outputStream.on('finish', () => {
+      resolve()
+    })
+
+    outputStream.on('error', error => {
+      reject(error)
+    })
+  })
+}
 
 function logMessageToLocal (message) {
   if (config.isLocalMessageLoggerEnabled) {
@@ -53,11 +73,19 @@ function logMessageToLocal (message) {
         const fileExtension = attachment.name.split('.').pop()
         const fileName = `${attachmentsFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}`
 
+        const compressedFileName = `${attachmentsFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}.gz`
+
         try {
           const response = await axios.get(url, { responseType: 'arraybuffer' })
           const buffer = Buffer.from(response.data, 'binary')
           fs.writeFileSync(fileName, buffer)
-          console.log(`Downloaded: ${fileName}`)
+
+          //compresses attachments
+          await compressAndSaveFile(fileName, compressedFileName, 9)
+          console.log(`Downloaded and compressed: ${compressedFileName}`)
+
+          // Delete the original file
+          fs.unlinkSync(fileName)
         } catch (error) {
           console.error('Error downloading attachment:', error)
         }

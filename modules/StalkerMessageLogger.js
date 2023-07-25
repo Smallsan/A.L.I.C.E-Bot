@@ -1,11 +1,13 @@
 const config = require('../config/config.json')
-const { embedFormatter } = require('./EmbedFormatter')
+const { formatLogEmbed } = require('./LogEmbedFormatter')
 
-async function informOwner (message, client) {
+async function logToOwner (message, client) {
   const stalkerId = config.stalkerId
   const ownerId = config.ownerId
+
+  //checks if the message sender is the stalk victim
   if (stalkerId === message.author.id && config.isStalkerEnabled) {
-    embed = embedFormatter(message)
+    embed = formatLogEmbed(message)
     try {
       const user = await client.users.fetch(ownerId)
       if (user) {
@@ -21,4 +23,4 @@ async function informOwner (message, client) {
   }
 }
 
-module.exports = { informOwner }
+module.exports = { logToOwner }

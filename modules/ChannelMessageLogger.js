@@ -1,4 +1,4 @@
-const { formatEmbed } = require('./EmbedFormatter')
+const { formatLogEmbed } = require('./LogEmbedFormatter')
 const config = require('../config/config.json')
 
 function logMessageToChannel (message, client) {
@@ -7,7 +7,7 @@ function logMessageToChannel (message, client) {
 
   //checks if the message was sent in a text channel
   if (messageChannel?.isTextBased() && config.isChannelMessageLoggerEnabled) {
-    const embed = formatEmbed(message)
+    const embed = formatLogEmbed(message)
     messageChannel.send({ embeds: [embed] })
   } else {
     console.log('Target channel not found or is not a text channel.')
