@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs  = require('fs')
 const axios = require('axios')
 const config = require('../config/config.json')
 const zlib = require('zlib')
@@ -80,12 +80,14 @@ function logMessageToLocal (message) {
           const buffer = Buffer.from(response.data, 'binary')
           fs.writeFileSync(fileName, buffer)
 
-          //compresses attachments
-          await compressAndSaveFile(fileName, compressedFileName, 9)
-          console.log(`Downloaded and compressed: ${compressedFileName}`)
+          if (config.enableAttachmentCompression) {
+            //compresses attachments
+            await compressAndSaveFile(fileName, compressedFileName, 9)
+            console.log(`Downloaded and compressed: ${compressedFileName}`)
 
-          // Delete the original file
-          fs.unlinkSync(fileName)
+            // Delete the original file
+            fs.unlinkSync(fileName)
+          }
         } catch (error) {
           console.error('Error downloading attachment:', error)
         }

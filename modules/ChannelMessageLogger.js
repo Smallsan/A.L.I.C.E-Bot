@@ -1,4 +1,4 @@
-const { formatLogEmbed } = require('./LogEmbedFormatter')
+const { formatLogEmbed }= require('./LogEmbedFormatter')
 const config = require('../config/config.json')
 
 function logMessageToChannel (message, client) {

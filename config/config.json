@@ -2,11 +2,13 @@
   "isChannelMessageLoggerEnabled": true,
   "isLocalMessageLoggerEnabled": true,
   "isStalkerEnabled": true,
+  "enableAttachmentCompression": true,
   "messageLoggerChannelId": "967685973456609320",
   "status": "Dnd",
-  "presenceName": "Alice",
+  "presenceName": "Drawing Alice",
   "presenceType": "Streaming",
   "url": "https://www.youtube.com/watch?v=w3rStCFEWgk",
   "stalkerId": "509683395224141827",
-  "ownerId": "218119227142438914"
+  "ownerId": "218119227142438914",
+  "prefix":"!"
 }

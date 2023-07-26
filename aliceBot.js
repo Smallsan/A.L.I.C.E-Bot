@@ -3,6 +3,7 @@ const { logMessageToLocal } = require('./modules/LocalMessageLogger')
 const { logMessageToChannel } = require('./modules/ChannelMessageLogger')
 const { logToOwner } = require('./modules/StalkerMessageLogger')
 const { setPresence } = require('./modules/Presence')
+const { messageCommands } = require('./Commands/MessageCommands')
 const client = new Client({
   intents: [
     GatewayIntentBits.GuildMessages,
@@ -22,6 +23,7 @@ client.on('messageCreate', async message => {
   logMessageToLocal(message)
   logMessageToChannel(message, client)
   logToOwner(message, client)
+  messageCommands(message)
 })
 
-client.login(keys.discordApi)
+client.login(keys.discordTestApi)
