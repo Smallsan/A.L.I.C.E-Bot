@@ -1,5 +1,5 @@
-const config = require('../config/config.json')
-const { formatLogEmbed } = require('./LogEmbedFormatter')
+import config from ('../config/config.json')
+import { formatLogEmbed } from('./LogEmbedFormatter')
 
 async function logToOwner (message, client) {
   const stalkerId = config.stalkerId

@@ -1,5 +1,5 @@
-const config = require('../config/config.json')
-const { ActivityType } = require('discord.js')
+import config from('../config/config.json')
+import { ActivityType } from ('discord.js')
 
 //capitalizes the first letter of the string for the ActivityType
 function capitalizeFirstLetter (string) {

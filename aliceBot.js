@@ -1,9 +1,9 @@
-const { Client, Intents, GatewayIntentBits } = require('discord.js')
-const { logMessageToLocal } = require('./modules/LocalMessageLogger')
-const { logMessageToChannel } = require('./modules/ChannelMessageLogger')
-const { logToOwner } = require('./modules/StalkerMessageLogger')
-const { setPresence } = require('./modules/Presence')
-const { messageCommands } = require('./Commands/MessageCommands')
+import { Client, Intents, GatewayIntentBits } from 'discord.js'
+import { logMessageToLocal } from './modules/LocalMessageLogger'
+import { logMessageToChannel } from './modules/ChannelMessageLogger'
+import { logToOwner } from './modules/StalkerMessageLogger'
+import { setPresence } from './modules/Presence'
+import { messageCommands } from './Commands/MessageCommands'
 const client = new Client({
   intents: [
     GatewayIntentBits.GuildMessages,

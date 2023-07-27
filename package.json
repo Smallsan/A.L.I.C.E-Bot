@@ -5,5 +5,16 @@
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
     "zlib": "^1.0.5"
-  }
+  },
+  "name": "alice-bot",
+  "description": "i'm still making it stooopid",
+  "version": "1.0.0",
+  "main": "aliceBot.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
 }

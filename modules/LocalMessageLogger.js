@@ -1,7 +1,7 @@
-const fs  = require('fs')
-const axios = require('axios')
-const config = require('../config/config.json')
-const zlib = require('zlib')
+import fs  from ('fs')
+import axios from ('axios')
+import config from ('../config/config.json')
+import zlib from ('zlib')
 
 function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
   return new Promise((resolve, reject) => {

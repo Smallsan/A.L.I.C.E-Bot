@@ -1,13 +1,13 @@
-const config = require('../config/config.json')
-const { fetchDanbooruUrl } = require('../apis/danbooru')
+import config from ('../config/config.json')
+import { fetchDanbooruUrl } from ('../apis/danbooru')
 const prefix = config.prefix
 
 async function messageCommands (message) {
   if (!message.content.startsWith(prefix) || message.author.bot) return
 
-  const arguments = message.content.slice(prefix.length).trim().split(' ')
-  const command = arguments.shift().toLowerCase()
-  const combinedArguments = arguments.join('')
+  const args = message.content.slice(prefix.length).trim().split(' ')
+  const command = args.shift().toLowerCase()
+  const combinedArguments = args.join('')
 
   if (command === 'danbooru') {
     const url = await fetchDanbooruUrl(combinedArguments)
