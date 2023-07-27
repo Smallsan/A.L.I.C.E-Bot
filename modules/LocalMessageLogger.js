@@ -1,7 +1,7 @@
-import fs  from ('fs')
-import axios from ('axios')
-import config from ('../config/config.json')
-import zlib from ('zlib')
+import fs from 'fs'
+import axios from 'axios'
+import config from '../config/config.json' assert { type: 'json' }
+import zlib from 'zlib'
 
 function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
   return new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
   })
 }
 
-function logMessageToLocal (message) {
+export function logMessageToLocal (message) {
   if (config.isLocalMessageLoggerEnabled) {
     //log directory path for the log and attachment files
     const logFolderPath = 'message-logs'
@@ -101,5 +101,3 @@ function logMessageToLocal (message) {
     })
   }
 }
-
-module.exports = { logMessageToLocal }

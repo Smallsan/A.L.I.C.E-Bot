@@ -1,7 +1,7 @@
-import { formatLogEmbed } from ('./LogEmbedFormatter')
-const config = require('../config/config.json')
+import { formatLogEmbed } from './LogEmbedFormatter.js'
+import config from '../config/config.json' assert { type: 'json' }
 
-function logMessageToChannel (message, client) {
+export function logMessageToChannel (message, client) {
   const channelId = config.messageLoggerChannelId
   const messageChannel = client.channels.cache.get(channelId)
 
@@ -14,4 +14,3 @@ function logMessageToChannel (message, client) {
   }
 }
 
-module.exports = { logMessageToChannel }

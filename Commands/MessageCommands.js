@@ -1,8 +1,8 @@
-import config from ('../config/config.json')
-import { fetchDanbooruUrl } from ('../apis/danbooru')
+import config from '../config/config.json' assert { type: 'json' };
+import { fetchDanbooruUrl } from '../apis/danbooru.js'
 const prefix = config.prefix
 
-async function messageCommands (message) {
+export async function messageCommands (message) {
   if (!message.content.startsWith(prefix) || message.author.bot) return
 
   const args = message.content.slice(prefix.length).trim().split(' ')
@@ -14,5 +14,3 @@ async function messageCommands (message) {
     message.channel.send(url)
   }
 }
-
-module.exports = { messageCommands }

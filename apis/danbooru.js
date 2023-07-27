@@ -1,6 +1,6 @@
-import fetch from('node-fetch')
+import fetch from 'node-fetch'
 
-async function fetchDanbooruUrl (tag) {
+export async function fetchDanbooruUrl (tag) {
   try {
     const url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(
       tag
@@ -22,5 +22,3 @@ async function fetchDanbooruUrl (tag) {
     throw error
   }
 }
-
-module.exports = { fetchDanbooruUrl }

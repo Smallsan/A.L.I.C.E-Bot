@@ -1,6 +1,6 @@
-import { EmbedBuilder } from ('discord.js')
+import { EmbedBuilder } from 'discord.js'
 
-function formatLogEmbed (message) {
+export function formatLogEmbed (message) {
   const instant = new Date()
   const user = message.author
   const messageLink = `[**Jump To Message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`
@@ -23,4 +23,4 @@ function formatLogEmbed (message) {
   return embed
 }
 
-module.exports = { formatLogEmbed }
+

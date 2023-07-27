@@ -1,7 +1,7 @@
-import config from ('../config/config.json')
-import { formatLogEmbed } from('./LogEmbedFormatter')
+import config from '../config/config.json' assert { type: 'json' };
+import { formatLogEmbed } from './LogEmbedFormatter.js'
 
-async function logToOwner (message, client) {
+export async function logToOwner (message, client) {
   const stalkerId = config.stalkerId
   const ownerId = config.ownerId
 
@@ -22,5 +22,3 @@ async function logToOwner (message, client) {
     }
   }
 }
-
-module.exports = { logToOwner }
