@@ -23,7 +23,7 @@ client.on('messageCreate', async message => {
   logMessageToLocal(message)
   logMessageToChannel(message, client)
   logToOwner(message, client)
-  messageCommands(message)
+  messageCommands(message, client)
 })
 
 client.login(keys.discordTestApi)
