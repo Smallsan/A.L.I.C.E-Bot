@@ -1,5 +1,5 @@
 import config from '../config/config.json' assert { type: 'json' }
-import { fetchDanbooruUrl } from '../apis/danbooru.js'
+import { fetchBooruUrl } from '../apis/BooruFetcher.js'
 const prefix = config.prefix
 
 export async function messageCommands (message, client) {
@@ -10,11 +10,19 @@ export async function messageCommands (message, client) {
   const combinedArguments = args.join('')
   const commandSentChannel = message.channel
 
-  const danbooruChannelId = config.danbooruChannelId
-  const danbooruChannel = client.channels.cache.get(danbooruChannelId)
+  const booruChannelId = config.booruChannelId
+  const booruChannel = client.channels.cache.get(booruChannelId)
 
-  if (command === 'danbooru' && config.isDanbooruEnabled && commandSentChannel === danbooruChannel) {
-    const url = await fetchDanbooruUrl(combinedArguments, client)
+  if (
+    config.isBooruEnabled &&
+    (commandSentChannel === booruChannel || booruChannelId === '')
+  ) {
+    let url
+    if (command === 'danbooru') {
+      url = await fetchBooruUrl(combinedArguments, command)
+    } else if (command === 'safebooru') {
+      url = await fetchBooruUrl(combinedArguments, command)
+    }
     if (url) {
       message.channel.send(url)
     } else {

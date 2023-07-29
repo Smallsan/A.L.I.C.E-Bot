@@ -1,12 +1,17 @@
 import fetch from 'node-fetch'
-
-export async function fetchDanbooruUrl (tag, client) {
-
+let url
+export async function fetchBooruUrl (tag, booru) {
   try {
-    // takes images from safebooru instead of danbooru to be safe "wink"
-    const url = `https://safebooru.donmai.us/posts.json?tags=${encodeURIComponent(
-      tag
-    )}+-rating:explicit&random=true`
+    if (booru === 'danbooru') {
+      url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(
+        tag
+      )}+-rating:explicit&random=true`
+    }
+    else if (booru === 'safebooru') {
+      url = `https://safebooru.donmai.us/posts.json?tags=${encodeURIComponent(
+        tag
+      )}+-rating:explicit&random=true`
+    }
 
     const response = await fetch(url)
     const data = await response.json()
@@ -14,7 +19,7 @@ export async function fetchDanbooruUrl (tag, client) {
     if (data.length > 0) {
       const tags = data[0].tag_string.split(' ')
       const imageUrl = data[0].file_url
-      console.log('Danbooru fetched a url:', imageUrl, tag)
+      console.log(booru + ' fetched a url:', imageUrl, tag)
       return imageUrl
     } else {
       console.log('No results found for the specified tag ' + tag)
