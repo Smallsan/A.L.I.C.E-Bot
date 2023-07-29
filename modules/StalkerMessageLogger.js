@@ -8,7 +8,7 @@ export async function logToOwner (message, client) {
   //checks if the message sender is the stalk victim
   if (stalkerId === message.author.id && config.isStalkerEnabled) {
     try {
-      embed = formatLogEmbed(message)
+      const embed = formatLogEmbed(message)
       const user = await client.users.fetch(ownerId)
       if (user) {
         const dmChannel = await user.createDM()
