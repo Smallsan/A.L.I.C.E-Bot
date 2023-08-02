@@ -14,15 +14,24 @@ export async function messageCommands (message, client) {
   const booruChannel = client.channels.cache.get(booruChannelId)
 
   if (
+    command === 'danbooru' &&
     config.isBooruEnabled &&
-    (commandSentChannel === booruChannel || booruChannelId === '')
+    commandSentChannel === booruChannel
   ) {
-    let url
-    if (command === 'danbooru') {
-      url = await fetchBooruUrl(combinedArguments, command)
-    } else if (command === 'safebooru') {
-      url = await fetchBooruUrl(combinedArguments, command)
+    const url = await fetchBooruUrl(combinedArguments, command)
+    if (url) {
+      message.channel.send(url)
+    } else {
+      message.channel.send('No results found for the specified tag.')
     }
+  }
+
+  if (
+    command === 'safebooru' &&
+    config.isBooruEnabled &&
+    commandSentChannel === booruChannel
+  ) {
+    const url = await fetchBooruUrl(combinedArguments, command)
     if (url) {
       message.channel.send(url)
     } else {

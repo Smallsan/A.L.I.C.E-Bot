@@ -1,13 +1,14 @@
 import fetch from 'node-fetch'
-let url
+
 export async function fetchBooruUrl (tag, booru) {
   try {
+    let url
+
     if (booru === 'danbooru') {
       url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(
         tag
       )}+-rating:explicit&random=true`
-    }
-    else if (booru === 'safebooru') {
+    } else if (booru === 'safebooru') {
       url = `https://safebooru.donmai.us/posts.json?tags=${encodeURIComponent(
         tag
       )}+-rating:explicit&random=true`

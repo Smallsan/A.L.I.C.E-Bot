@@ -4,13 +4,13 @@
     "discord.js": "^14.11.0",
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
+    "papaparse": "^5.4.1",
     "zlib": "^1.0.5"
   },
   "name": "alice-bot",
   "description": "i'm still making it stooopid",
   "version": "1.0.0",
   "main": "aliceBot.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
