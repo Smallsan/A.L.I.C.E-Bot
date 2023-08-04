@@ -17,8 +17,9 @@ async function scrapeAllTags () {
         break
       }
 
-      const tags = data.map(tag => tag.name)
-      allTags = allTags.concat(tags)
+      const filteredTags = data.filter(tag => tag.post_count >= 100);
+      const tags = filteredTags.map(tag => tag.name);
+      allTags = allTags.concat(tags);
 
       page++ // Move to the next page
       console.log('Page:', page)

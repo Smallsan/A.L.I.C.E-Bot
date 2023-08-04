@@ -15,7 +15,7 @@ export async function messageCommands (message, client) {
 
   if (
     command === 'danbooru' &&
-    config.isBooruEnabled &&
+    config.isDanbooruEnabled &&
     commandSentChannel === booruChannel
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)
@@ -28,7 +28,7 @@ export async function messageCommands (message, client) {
 
   if (
     command === 'safebooru' &&
-    config.isBooruEnabled &&
+    config.isSafebooruEnabled &&
     commandSentChannel === booruChannel
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)

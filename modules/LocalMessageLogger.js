@@ -1,8 +1,8 @@
 import fs from 'fs'
 import axios from 'axios'
 import config from '../config/config.json' assert { type: 'json' }
-import zlib from 'zlib'
 
+//Work in progress, Will finish maybe tomorrow
 function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
   return new Promise((resolve, reject) => {
     const inputStream = fs.createReadStream(inputFilePath)
@@ -27,6 +27,12 @@ export function logMessageToLocal (message) {
     //log directory path for the log and attachment files
     const logFolderPath = 'message-logs'
     const attachmentsFolderPath = `${logFolderPath}/attachments`
+
+    //temp folder for attachments
+    const tempFolderPath = 'message-logs/attachments/temp-attachments'
+    if (!fs.existsSync(tempFolderPath)) {
+      fs.mkdirSync(tempFolderPath)
+    }
 
     //format for the messages in the log file
     const { guild, channel, author, content } = message
@@ -56,7 +62,6 @@ export function logMessageToLocal (message) {
 
     let logFilePath = createLogFile()
 
-    //checks date in intervals and creates a seperate log text file per date (every 10 minutes)
     const checkDateInterval = setInterval(() => {
       const newLogFile = createLogFile()
       if (newLogFile !== logFilePath) {
@@ -71,25 +76,20 @@ export function logMessageToLocal (message) {
         const currentDate = new Date()
         const formattedDate = currentDate.toISOString().slice(0, 10)
         const fileExtension = attachment.name.split('.').pop()
-        const fileName = `${attachmentsFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}`
-
-        const compressedFileName = `${attachmentsFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}.gz`
+        const fileName = `${tempFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}`
 
         try {
           const response = await axios.get(url, { responseType: 'arraybuffer' })
           const buffer = Buffer.from(response.data, 'binary')
           fs.writeFileSync(fileName, buffer)
+          console.log(`Downloaded: ${fileName}`)
 
-          if (config.enableAttachmentCompression) {
-            //compresses attachments
-            await compressAndSaveFile(fileName, compressedFileName, 9)
-            console.log(`Downloaded and compressed: ${compressedFileName}`)
+          // if (config.enableAttachmentCompression) {
+          //   console.log('Insert future compression logic')
+          // }
 
-            // Delete the original file
-            fs.unlinkSync(fileName)
-          }
         } catch (error) {
-          console.error('Error downloading attachment:', error)
+          console.error(error)
         }
       })
     }
@@ -99,5 +99,6 @@ export function logMessageToLocal (message) {
         console.error('Error writing to log file:', err)
       }
     })
+
   }
 }

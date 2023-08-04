@@ -3,8 +3,10 @@
     "axios": "^1.4.0",
     "discord.js": "^14.11.0",
     "fs": "^0.0.1-security",
+    "googleapis": "^123.0.0",
     "node-fetch": "^3.3.2",
     "papaparse": "^5.4.1",
+    "path": "^0.12.7",
     "zlib": "^1.0.5"
   },
   "name": "alice-bot",
