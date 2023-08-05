@@ -1,34 +1,24 @@
 import fs from 'fs'
 import axios from 'axios'
 import config from '../config/config.json' assert { type: 'json' }
-
-//Work in progress, Will finish maybe tomorrow
-function compressAndSaveFile (inputFilePath, outputFilePath, compressionLevel) {
-  return new Promise((resolve, reject) => {
-    const inputStream = fs.createReadStream(inputFilePath)
-    const outputStream = fs.createWriteStream(outputFilePath)
-    // 0-9 compression level, 9 is highest, 0 is none
-    const gzip = zlib.createGzip({ level: compressionLevel })
-
-    inputStream.pipe(gzip).pipe(outputStream)
-
-    outputStream.on('finish', () => {
-      resolve()
-    })
-
-    outputStream.on('error', error => {
-      reject(error)
-    })
-  })
-}
+import { compressFilesInFolder } from './FileCompressor.js'
 
 export function logMessageToLocal (message) {
   if (config.isLocalMessageLoggerEnabled) {
-    //log directory path for the log and attachment files
-    const logFolderPath = 'message-logs'
-    const attachmentsFolderPath = `${logFolderPath}/attachments`
+    let currentDate = new Date()
+    let formattedDate = currentDate.toISOString().slice(0, 10)
 
-    //temp folder for attachments
+    //Directory stuff
+    const logFolderPath = 'message-logs'
+    if (!fs.existsSync(logFolderPath)) {
+      fs.mkdirSync(logFolderPath)
+    }
+
+    const attachmentsFolderPath = `${logFolderPath}/attachments`
+    if (!fs.existsSync(attachmentsFolderPath)) {
+      fs.mkdirSync(attachmentsFolderPath)
+    }
+
     const tempFolderPath = 'message-logs/attachments/temp-attachments'
     if (!fs.existsSync(tempFolderPath)) {
       fs.mkdirSync(tempFolderPath)
@@ -43,7 +33,7 @@ export function logMessageToLocal (message) {
     const logAuthorId = author.id
     const log = `[${logDate}] ${logGuildName} - #${logChannelName}: ${logAuthorTag} (${logAuthorId}) - ${content}\n`
 
-    //creates a log file with the
+    //creates a log file
     function createLogFile () {
       const logFileNamePrefix = 'message-log'
       const formattedDate = new Date().toISOString().slice(0, 10)
@@ -51,18 +41,10 @@ export function logMessageToLocal (message) {
       return `${logFolderPath}/${logFileName}`
     }
 
-    //checks for the presence of the message-logs folder and the attachments folder and creates them if they're missing
-    if (!fs.existsSync(logFolderPath)) {
-      fs.mkdirSync(logFolderPath)
-    }
-
-    if (!fs.existsSync(attachmentsFolderPath)) {
-      fs.mkdirSync(attachmentsFolderPath)
-    }
-
     let logFilePath = createLogFile()
 
-    const checkDateInterval = setInterval(() => {
+    // checks date in intervals if it changed
+    setInterval(() => {
       const newLogFile = createLogFile()
       if (newLogFile !== logFilePath) {
         logFilePath = newLogFile
@@ -73,8 +55,6 @@ export function logMessageToLocal (message) {
     if (message.attachments.size > 0) {
       message.attachments.forEach(async attachment => {
         const url = attachment.url
-        const currentDate = new Date()
-        const formattedDate = currentDate.toISOString().slice(0, 10)
         const fileExtension = attachment.name.split('.').pop()
         const fileName = `${tempFolderPath}/${formattedDate}-${Date.now()}.${fileExtension}`
 
@@ -83,22 +63,54 @@ export function logMessageToLocal (message) {
           const buffer = Buffer.from(response.data, 'binary')
           fs.writeFileSync(fileName, buffer)
           console.log(`Downloaded: ${fileName}`)
-
-          // if (config.enableAttachmentCompression) {
-          //   console.log('Insert future compression logic')
-          // }
-
         } catch (error) {
           console.error(error)
         }
       })
+      fs.appendFile(logFilePath, log, err => {
+        if (err) {
+          console.error('Error writing to log file:', err)
+        }
+      })
     }
 
-    fs.appendFile(logFilePath, log, err => {
-      if (err) {
-        console.error('Error writing to log file:', err)
-      }
-    })
+    // deletes all files in attachments
+    function clearTempAttachments () {
+      fs.readdir(tempFolderPath, (err, files) => {
+        if (err) {
+          console.error('Error reading temp folder:', err)
+          return
+        }
 
+        files.forEach(file => {
+          const filePath = `${tempFolderPath}/${file}`
+          fs.unlink(filePath, err => {
+            if (err) {
+              console.error('Error deleting file:', err)
+            } else {
+              console.log(`Deleted: ${filePath}`)
+            }
+          })
+        })
+      })
+    }
+
+    // compresses the files in the folder every interval
+    setInterval(() => {
+      const filesInTempFolder = fs.readdirSync(tempFolderPath)
+      if (filesInTempFolder.length > 0) {
+        const compressedFileName = `${attachmentsFolderPath}/bundle-${formattedDate}.gz`
+        compressFilesInFolder(tempFolderPath, compressedFileName, 9)
+          .then(() => {
+            console.log(`Compressed bundle created: ${compressedFileName}`)
+            clearTempAttachments()
+          })
+          .catch(error => {
+            console.error('Error compressing and clearing attachments:', error)
+          })
+      } else {
+        console.log('nothing to compress')
+      }
+    }, 60 * 100) // 1 minute
   }
 }
