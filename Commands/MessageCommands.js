@@ -38,4 +38,6 @@ export async function messageCommands (message, client) {
       message.channel.send('No results found for the specified tag.')
     }
   }
+
+  
 }
