@@ -2,6 +2,9 @@ import config from '../config/config.json' assert { type: 'json' }
 import { fetchBooruUrl } from '../apis/BooruFetcher.js'
 const prefix = config.prefix
 
+let isDanbooruEnabled = config.isDanbooruEnabled
+let isSafebooruEnabled = config.isSafebooruEnabled
+
 export async function messageCommands (message, client) {
   if (!message.content.startsWith(prefix) || message.author.bot) return
 
@@ -15,7 +18,7 @@ export async function messageCommands (message, client) {
 
   if (
     command === 'danbooru' &&
-    config.isDanbooruEnabled &&
+    isDanbooruEnabled &&
     commandSentChannel === booruChannel
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)
@@ -28,7 +31,7 @@ export async function messageCommands (message, client) {
 
   if (
     command === 'safebooru' &&
-    config.isSafebooruEnabled &&
+    isSafebooruEnabled &&
     commandSentChannel === booruChannel
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)

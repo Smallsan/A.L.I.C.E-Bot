@@ -3,8 +3,10 @@ import axios from 'axios'
 import config from '../config/config.json' assert { type: 'json' }
 import { compressFilesInFolder } from './FileCompressor.js'
 
+let isLocalMessageLoggerEnabled = config.isLocalMessageLoggerEnabled
+
 export function logMessageToLocal (message) {
-  if (config.isLocalMessageLoggerEnabled) {
+  if (isLocalMessageLoggerEnabled) {
     let currentDate = new Date()
     let formattedDate = currentDate.toISOString().slice(0, 10)
 
