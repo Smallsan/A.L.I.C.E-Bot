@@ -1,11 +1,29 @@
 import config from '../config/config.json' assert { type: 'json' }
 import { fetchBooruUrl } from '../apis/BooruFetcher.js'
-const prefix = config.prefix
+import { client } from '../AliceBot.js'
 
+let prefix = config.prefix
 let isDanbooruEnabled = config.isDanbooruEnabled
 let isSafebooruEnabled = config.isSafebooruEnabled
+let booruChannelId = config.booruChannelId
 
-export async function messageCommands (message, client) {
+
+function isInDanbooruChannel(commandSentChannel) {
+  
+  if (booruChannelId == '' || booruChannel == commandSentChannel){
+    return true
+  }
+  else{
+    const booruChannel = client.channels.cache.get(booruChannelId)
+    if (booruChannel == commandSentChannel){
+      return true
+    }
+    return false
+  }
+
+}
+
+export async function messageCommands (message) {
   if (!message.content.startsWith(prefix) || message.author.bot) return
 
   const args = message.content.slice(prefix.length).trim().split(' ')
@@ -13,13 +31,10 @@ export async function messageCommands (message, client) {
   const combinedArguments = args.join('')
   const commandSentChannel = message.channel
 
-  const booruChannelId = config.booruChannelId
-  const booruChannel = client.channels.cache.get(booruChannelId)
-
   if (
     command === 'danbooru' &&
     isDanbooruEnabled &&
-    commandSentChannel === booruChannel
+    isInDanbooruChannel(commandSentChannel)
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)
     if (url) {
@@ -32,7 +47,7 @@ export async function messageCommands (message, client) {
   if (
     command === 'safebooru' &&
     isSafebooruEnabled &&
-    commandSentChannel === booruChannel
+    isInDanbooruChannel(commandSentChannel)
   ) {
     const url = await fetchBooruUrl(combinedArguments, command)
     if (url) {

@@ -10,16 +10,16 @@ fs.createReadStream('./apis/all_tags.csv')
     tagList.push(row.Tag)
   })
   .on('end', () => {
-    console.log('CSV file parsed and tag list created.');
-  });
+    console.log('CSV file parsed and tag list created.')
+  })
 
-export function autocorrectTag(inputTag) {
+export function autoCorrectTag (inputTag) {
   const results = fuzzysort.go(inputTag, tagList, {
-    limit: 5, // Number of results to return
+    limit: 3, // Number of results to return
     threshold: -10000, // Adjust the threshold for sensitivity
     allowTypo: true // Allow for typos
   })
 
   return results.map(result => result.target)
-
 }
+

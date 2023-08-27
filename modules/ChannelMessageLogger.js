@@ -1,10 +1,12 @@
 import { formatLogEmbed } from './LogEmbedFormatter.js'
 import config from '../config/config.json' assert { type: 'json' }
+import { client } from '../AliceBot.js'
 
-isChannelMessageLoggerEnabled = config.isChannelMessageLoggerEnabled
 
-export function logMessageToChannel (message, client) {
-  const channelId = config.messageLoggerChannelId
+let isChannelMessageLoggerEnabled = config.isChannelMessageLoggerEnabled
+let channelId = config.messageLoggerChannelId
+
+export function logMessageToChannel (message) {
   const messageChannel = client.channels.cache.get(channelId)
 
   //checks if the message was sent in a text channel
@@ -15,4 +17,3 @@ export function logMessageToChannel (message, client) {
     console.log('Target channel not found or is not a text channel.')
   }
 }
-

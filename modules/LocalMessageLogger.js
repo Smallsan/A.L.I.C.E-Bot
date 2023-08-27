@@ -1,7 +1,6 @@
 import fs from 'fs'
 import axios from 'axios'
 import config from '../config/config.json' assert { type: 'json' }
-import { compressFilesInFolder } from './FileCompressor.js'
 
 let isLocalMessageLoggerEnabled = config.isLocalMessageLoggerEnabled
 
@@ -76,43 +75,5 @@ export function logMessageToLocal (message) {
       })
     }
 
-    // deletes all files in attachments
-    function clearTempAttachments () {
-      fs.readdir(tempFolderPath, (err, files) => {
-        if (err) {
-          console.error('Error reading temp folder:', err)
-          return
-        }
-
-        files.forEach(file => {
-          const filePath = `${tempFolderPath}/${file}`
-          fs.unlink(filePath, err => {
-            if (err) {
-              console.error('Error deleting file:', err)
-            } else {
-              console.log(`Deleted: ${filePath}`)
-            }
-          })
-        })
-      })
-    }
-
-    // compresses the files in the folder every interval
-    setInterval(() => {
-      const filesInTempFolder = fs.readdirSync(tempFolderPath)
-      if (filesInTempFolder.length > 0) {
-        const compressedFileName = `${attachmentsFolderPath}/bundle-${formattedDate}.gz`
-        compressFilesInFolder(tempFolderPath, compressedFileName, 9)
-          .then(() => {
-            console.log(`Compressed bundle created: ${compressedFileName}`)
-            clearTempAttachments()
-          })
-          .catch(error => {
-            console.error('Error compressing and clearing attachments:', error)
-          })
-      } else {
-        console.log('nothing to compress')
-      }
-    }, 60 * 100) // 1 minute
   }
 }

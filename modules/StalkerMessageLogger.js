@@ -1,12 +1,14 @@
 import config from '../config/config.json' assert { type: 'json' };
 import { formatLogEmbed } from './LogEmbedFormatter.js'
+import { client } from '../AliceBot.js'
+
 
 let isStalkerEnabled = config.isStalkerEnabled
+let stalkerId = config.stalkerId
+let ownerId = config.ownerId
 
-export async function logToOwner (message, client) {
-  const stalkerId = config.stalkerId
-  const ownerId = config.ownerId
 
+export async function logToOwner (message) {
 
   if (stalkerId === message.author.id && isStalkerEnabled) {
     try {

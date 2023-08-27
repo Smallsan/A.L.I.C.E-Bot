@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { autocorrectTag } from './FuzzyAutoCorrect'
+import { autoCorrectTag } from './FuzzyAutoCorrect.js'
 
 export async function fetchBooruUrl (tag, booru) {
   try {
@@ -24,8 +24,10 @@ export async function fetchBooruUrl (tag, booru) {
       console.log(booru + ' fetched a url:', imageUrl, tag)
       return imageUrl
     } else {
-      console.log('No results found for the specified tag ' + tag)
-      return 'did you perhaps mean', autocorrectTag(tag)
+      console.log('No results found for the specified tag ')
+      console.log(autoCorrectTag(tag))
+      return 'Did you perhaps mean' + "\n" + autoCorrectTag(tag)
+    
     }
   } catch (error) {
     console.error('Error fetching url:', error)
