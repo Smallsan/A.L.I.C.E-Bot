@@ -21,12 +21,12 @@ export async function fetchBooruUrl (tag, booru) {
     if (data.length > 0) {
       const tag = data[0].tag_string.split(' ')
       const imageUrl = data[0].file_url
-      console.log(booru + ' fetched a url:', imageUrl, tag)
+      console.log(booru + ' fetched a url:', imageUrl)
       return imageUrl
     } else {
       console.log('No results found for the specified tag ')
       console.log(autoCorrectTag(tag))
-      return 'Did you perhaps mean' + "\n" + autoCorrectTag(tag)
+      return 'Showing Similar Tags' + "\n" + autoCorrectTag(tag)
     
     }
   } catch (error) {

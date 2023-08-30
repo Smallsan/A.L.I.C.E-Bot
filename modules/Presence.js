@@ -10,7 +10,7 @@ export function setPresence (presenceName, presenceType, url) {
   
   client.user.setActivity({
     name: presenceName,
-    type: ActivityType[presenceType],
+    type: ActivityType[capitalizeFirstLetter(presenceType)],
     url: url
   })
 }

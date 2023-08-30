@@ -15,8 +15,8 @@ fs.createReadStream('./apis/all_tags.csv')
 
 export function autoCorrectTag (inputTag) {
   const results = fuzzysort.go(inputTag, tagList, {
-    limit: 3, // Number of results to return
-    threshold: -10000, // Adjust the threshold for sensitivity
+    limit: 1, // Number of results to return
+    threshold: -Infinity, // Adjust the threshold for sensitivity
     allowTypo: true // Allow for typos
   })
 

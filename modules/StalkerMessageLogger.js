@@ -1,19 +1,16 @@
-import config from '../config/config.json' assert { type: 'json' };
+import config from '../config/config.json' assert { type: 'json' }
 import { formatLogEmbed } from './LogEmbedFormatter.js'
 import { client } from '../AliceBot.js'
 
-
 let isStalkerEnabled = config.isStalkerEnabled
 let stalkerId = config.stalkerId
-let ownerId = config.ownerId
-
+let recipientId = config.recipientId
 
 export async function logToOwner (message) {
-
   if (stalkerId === message.author.id && isStalkerEnabled) {
     try {
       const embed = formatLogEmbed(message)
-      const user = await client.users.fetch(ownerId)
+      const user = await client.users.fetch(recipientId)
       if (user) {
         const dmChannel = await user.createDM()
         await dmChannel.send({ embeds: [embed] })
@@ -25,4 +22,32 @@ export async function logToOwner (message) {
       console.error('Error sending direct message:', error)
     }
   }
+}
+
+export function toggleStalker () {
+  if (isStalkerEnabled === true) {
+    isStalkerEnabled = false
+  } else {
+    isStalkerEnabled = true
+  }
+}
+
+export function stalkerStatus () {
+  return isStalkerEnabled
+}
+
+export function setStalkerId (userId) {
+  stalkerId = userId
+}
+
+export function showStalkerId () {
+  return stalkerId
+}
+
+export function setRecipientId (userId) {
+  recipientId = userId
+}
+
+export function showRecipientId () {
+  return recipientId
 }

@@ -33,4 +33,4 @@ client.on('messageCreate', async message => {
   messageCommands(message)
 })
 
-client.login(keys.discordApi)
+client.login(keys.discordTestApi)

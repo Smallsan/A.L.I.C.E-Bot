@@ -74,6 +74,17 @@ export function logMessageToLocal (message) {
         }
       })
     }
-
   }
+}
+
+export function toggleLocalMessageLogger () {
+  if (isLocalMessageLoggerEnabled === true) {
+    isLocalMessageLoggerEnabled = false
+  } else {
+    isLocalMessageLoggerEnabled = true
+  }
+}
+
+export function LocalMessageLoggerStatus () {
+  return isLocalMessageLoggerEnabled
 }
