@@ -1,10 +1,10 @@
 {
   "isChannelMessageLoggerEnabled": true,
   "isLocalMessageLoggerEnabled": true,
-  "isStalkerEnabled": true,
+  "isStalkerEnabled": false,
   "isDanbooruEnabled": true,
   "isSafebooruEnabled": true,
-  "enableAttachmentCompression": true,
+  "isAttachmentCompressionEnabled": true,
   "messageLoggerChannelId": "967685973456609320",
   "booruChannelId": "",
   "status": "Dnd",

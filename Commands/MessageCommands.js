@@ -9,7 +9,11 @@ import {
 } from '../modules/ChannelMessageLogger.js'
 import {
   LocalMessageLoggerStatus,
-  toggleLocalMessageLogger
+  toggleLocalMessageLogger,
+  setCompressForEvery,
+  showCompressForEvery,
+  toggleAttachmentCompressor,
+  attachmentCompressorStatus
 } from '../modules/LocalMessageLogger.js'
 import {
   stalkerStatus,
@@ -94,6 +98,12 @@ export async function messageCommands (message) {
         '\n' +
         'Local Message Logger Status: ' +
         LocalMessageLoggerStatus() +
+        '\n' +
+        'Attachment Compressor Status: ' +
+        attachmentCompressorStatus() +
+        '\n' +
+        'Compresses For Every: ' +
+        showCompressForEvery() +
         '\n' +
         'Channel Message Logger Status: ' +
         ChannelMessageLoggerStatus() +
