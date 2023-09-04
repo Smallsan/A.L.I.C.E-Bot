@@ -4,6 +4,7 @@ import { logMessageToChannel } from './modules/ChannelMessageLogger.js'
 import { logToOwner } from './modules/StalkerMessageLogger.js'
 import { messageCommands } from './Commands/MessageCommands.js'
 import { setPresence } from './modules/Presence.js'
+import { checkAttachments } from './apis/antiNsfw.js'
 import config from './config/config.json' assert { type: 'json' }
 import keys from './keys.json' assert { type: 'json' }
 
@@ -13,6 +14,7 @@ const url = config.url
 
 export const client = new Client({
   intents: [
+    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent,
@@ -31,6 +33,7 @@ client.on('messageCreate', async message => {
   logMessageToChannel(message)
   logToOwner(message)
   messageCommands(message)
+  checkAttachments(message)
 })
 
 client.login(keys.discordTestApi)

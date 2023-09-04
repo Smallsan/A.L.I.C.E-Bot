@@ -1,6 +1,7 @@
 import config from '../config/config.json' assert { type: 'json' }
 import { fetchBooruUrl } from '../apis/BooruFetcher.js'
 import { client } from '../AliceBot.js'
+import fs from 'fs'
 import {
   ChannelMessageLoggerStatus,
   toggleChannelMessageLogger,
@@ -29,6 +30,8 @@ let isDanbooruEnabled = config.isDanbooruEnabled
 let isSafebooruEnabled = config.isSafebooruEnabled
 let booruChannelId = config.booruChannelId
 
+let isLoggingMessages = false
+
 function isInDanbooruChannel (commandSentChannel) {
   if (booruChannelId == '' || booruChannel == commandSentChannel) {
     return true
@@ -38,6 +41,62 @@ function isInDanbooruChannel (commandSentChannel) {
       return true
     }
     return false
+  }
+}
+
+async function logEveryMessageInChannel (channel) {
+  if (isLoggingMessages) {
+    channel.send('The command is already active.')
+    return
+  }
+  isLoggingMessages = true
+
+  try {
+    const messagesToFetch = Infinity
+    const delayBetweenRequests = 1000
+
+    const messages = []
+    let lastMessageID = null
+
+    for (let i = 0; i < messagesToFetch / 100; i++) {
+      const fetchedMessages = await channel.messages.fetch({
+        limit: 100,
+        before: lastMessageID
+      })
+
+      messages.push(...fetchedMessages.values())
+
+      console.log(i * 100 + ' recorded messages')
+
+      if (fetchedMessages.size === 0) {
+        break
+      }
+
+      lastMessageID = fetchedMessages.last().id
+      await new Promise(resolve => setTimeout(resolve, delayBetweenRequests))
+    }
+
+    const logDate = new Date().toISOString().replace(/:/g, '-')
+    const logGuildName = channel.guild.name.replace(/ /g, '_')
+    const logChannelName = channel.name.replace(/ /g, '_')
+
+    const logContent = messages
+      .map(m => `[${m.createdAt}] ${m.author.tag}: ${m.content}`)
+      .join('\n')
+
+    const logFilePath = `./message-logs/${logGuildName}-${logChannelName}-${logDate}-backup.txt`
+
+    fs.writeFileSync(logFilePath, logContent)
+
+    channel.send(`Logged ${messages.length} messages.`)
+    if (messages.length <= 100000){
+      channel.send({ files: [logFilePath] })
+    }
+    console.log(`Logged messages to ${logFilePath}`)
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoggingMessages = false
   }
 }
 
@@ -113,6 +172,19 @@ export async function messageCommands (message) {
         '\n' +
         '```'
     )
+  }
+
+  if (command === 'logchannel') {
+    logEveryMessageInChannel(message.channel)
+  }
+  if (command === 'logeverychannel') {
+    const guild = message.guild
+    const channels = guild.channels.cache.filter(channel => channel.type === 'text')
+    console.log(`Total text channels: ${channels.size}`);
+    channels.forEach(async channel => {
+      await logEveryMessageInChannel(channel)
+      
+    })
   }
 }
 
