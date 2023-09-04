@@ -2,6 +2,9 @@ import nsfwjs from 'nsfwjs'
 import axios from 'axios'
 import tf from '@tensorflow/tfjs-node'
 import sharp from 'sharp'
+import config from '../config/config.json' assert { type: 'json' }
+
+let isAntiNsfwEnabled = config.isAntiNsfwEnabled
 
 const nsfwModel = await nsfwjs.load()
 
@@ -10,49 +13,68 @@ function isSupportedImage (contentType) {
 }
 
 export async function checkAttachments (message) {
-  for (const attachment of message.attachments.values()) {
-    const attachmentContent = await axios.get(attachment.url, {
-      responseType: 'arraybuffer'
-    })
+  if (isAntiNsfwEnabled) {
+    for (const attachment of message.attachments.values()) {
+      const attachmentContent = await axios.get(attachment.url, {
+        responseType: 'arraybuffer'
+      })
 
-    const contentType = attachmentContent.headers['content-type']
+      const contentType = attachmentContent.headers['content-type']
 
-    if (!isSupportedImage(contentType)) {
-      // must be a video file
-      console.log('Unsupported content type:', contentType)
-      continue
-    }
+      if (!isSupportedImage(contentType)) {
+        // must be a video file
+        console.log('Unsupported content type:', contentType)
+        continue
+      }
 
-    const imageBuffer = attachmentContent.data
+      const imageBuffer = attachmentContent.data
 
-    const resizedImageBuffer = await sharp(imageBuffer)
-      .resize({ width: 224, height: 224, fit: sharp.fit.inside, interpolator: 'bicubic' }) 
-      .toBuffer();
+      const resizedImageBuffer = await sharp(imageBuffer)
+        .resize({
+          width: 224,
+          height: 224,
+          fit: sharp.fit.inside,
+          interpolator: 'bicubic'
+        })
+        .toBuffer()
 
-    const image = tf.node.decodeImage(resizedImageBuffer)
+      const image = tf.node.decodeImage(resizedImageBuffer)
 
-    const predictions = await nsfwModel.classify(image)
+      const predictions = await nsfwModel.classify(image)
 
-    console.log(predictions)
+      console.log(predictions)
 
-    image.dispose()
+      image.dispose()
 
-    const probabilityTolerance = 0.7
+      const probabilityTolerance = 0.7
 
-    if (
-      predictions[0].probability > probabilityTolerance &&
-      (predictions[0].className === 'Porn' ||
-        predictions[0].className === 'Hentai')
-    ) {
-      try {
-        await message.delete()
-        console.log('An explicit image was deleted')
-        message.channel.send('An explicit image was deleted')
-        // Insert punishment for user or something
-        return
-      } catch (error) {
-        console.error('Error deleting message', error)
+      if (
+        predictions[0].probability > probabilityTolerance &&
+        (predictions[0].className === 'Porn' ||
+          predictions[0].className === 'Hentai')
+      ) {
+        try {
+          await message.delete()
+          console.log('An explicit image was deleted')
+          message.channel.send('An explicit image was deleted')
+          // Insert punishment for user or something
+          return
+        } catch (error) {
+          console.error('Error deleting message', error)
+        }
       }
     }
   }
+}
+
+export function toggleAntiNsfw () {
+  if (isAntiNsfwEnabled === true) {
+    isAntiNsfwEnabled = false
+  } else {
+    isAntiNsfwEnabled = true
+  }
+}
+
+export function antiNsfwStatus () {
+  return isAntiNsfwEnabled
 }

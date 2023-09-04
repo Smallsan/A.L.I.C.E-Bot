@@ -24,6 +24,7 @@ import {
   showRecipientId,
   showStalkerId
 } from '../modules/StalkerMessageLogger.js'
+import { antiNsfwStatus, toggleAntiNsfw } from '../apis/antiNsfw.js'
 
 let messageCommandPrefix = config.prefix
 let isDanbooruEnabled = config.isDanbooruEnabled
@@ -89,7 +90,7 @@ async function logEveryMessageInChannel (channel) {
     fs.writeFileSync(logFilePath, logContent)
 
     channel.send(`Logged ${messages.length} messages.`)
-    if (messages.length <= 100000){
+    if (messages.length <= 100000) {
       channel.send({ files: [logFilePath] })
     }
     console.log(`Logged messages to ${logFilePath}`)
@@ -170,6 +171,9 @@ export async function messageCommands (message) {
         'Channel Message Logger Id: ' +
         showMessageLoggerChannelId() +
         '\n' +
+        'Anti Nsfw Status: ' +
+        antiNsfwStatus() +
+        '\n' +
         '```'
     )
   }
@@ -179,11 +183,12 @@ export async function messageCommands (message) {
   }
   if (command === 'logeverychannel') {
     const guild = message.guild
-    const channels = guild.channels.cache.filter(channel => channel.type === 'text')
-    console.log(`Total text channels: ${channels.size}`);
+    const channels = guild.channels.cache.filter(
+      channel => channel.type === 'text'
+    )
+    console.log(`Total text channels: ${channels.size}`)
     channels.forEach(async channel => {
       await logEveryMessageInChannel(channel)
-      
     })
   }
 }

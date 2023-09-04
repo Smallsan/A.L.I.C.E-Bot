@@ -5,6 +5,7 @@
   "isDanbooruEnabled": true,
   "isSafebooruEnabled": true,
   "isAttachmentCompressionEnabled": true,
+  "isAntiNsfwEnabled": true,
   "messageLoggerChannelId": "967685973456609320",
   "booruChannelId": "",
   "status": "Dnd",
