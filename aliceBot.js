@@ -36,4 +36,4 @@ client.on('messageCreate', async message => {
   checkAttachments(message)
 })
 
-client.login(keys.discordApi)
+client.login(keys.discordTestApi)
