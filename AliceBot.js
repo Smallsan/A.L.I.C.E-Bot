@@ -13,6 +13,7 @@ const presenceType = config.presenceType
 const url = config.url
 
 export const client = new Client({
+  autoReconnect: true,
   intents: [
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildMessages,

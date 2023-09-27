@@ -55,6 +55,12 @@ export function logMessageToLocal (message) {
       }
     }, 600000)
 
+    fs.appendFile(logFilePath, log, err => {
+      if (err) {
+        console.error('Error writing to log file:', err)
+      }
+    })
+
     if (isAttachmentCompressionEnabled && message.attachments.size > 0) {
       const compressedBuffers = []
       let counter = 0
@@ -126,9 +132,14 @@ export function logMessageToLocal (message) {
         }
       })
 
+
     }
+    
+    
   }
+  
 }
+
 
 export function toggleLocalMessageLogger () {
   if (isLocalMessageLoggerEnabled === true) {
