@@ -1,6 +1,6 @@
-import { formatLogEmbed } from './LogEmbedFormatter.js'
+import { formatLogEmbed } from './log-embed-formatter.js'
 import config from '../config/config.json' assert { type: 'json' }
-import { client } from '../AliceBot.js'
+import { client } from '../discord-bot.js'
 
 let isChannelMessageLoggerEnabled = config.isChannelMessageLoggerEnabled
 let messageLoggerChannelId = config.messageLoggerChannelId

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { autoCorrectTag } from './FuzzyAutoCorrect.js'
+import { autoCorrectTag } from './fuzzy-search.js'
 
 export async function fetchBooruUrl (tag, booru) {
   try {

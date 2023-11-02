@@ -1,13 +1,13 @@
 import config from '../config/config.json' assert { type: 'json' }
-import { fetchBooruUrl } from '../apis/BooruFetcher.js'
-import { client } from '../AliceBot.js'
+import { fetchBooruUrl } from '../apis/booru-fetcher.js'
+import { client } from '../discord-bot.js'
 import fs from 'fs'
 import {
   ChannelMessageLoggerStatus,
   toggleChannelMessageLogger,
   setMessageLoggerChannelId,
   showMessageLoggerChannelId
-} from '../modules/ChannelMessageLogger.js'
+} from '../modules/channel-message-logger.js'
 import {
   LocalMessageLoggerStatus,
   toggleLocalMessageLogger,
@@ -15,7 +15,7 @@ import {
   showCompressForEvery,
   toggleAttachmentCompressor,
   attachmentCompressorStatus
-} from '../modules/LocalMessageLogger.js'
+} from '../modules/local-message-logger.js'
 import {
   stalkerStatus,
   toggleStalker,
@@ -23,8 +23,8 @@ import {
   setStalkerId,
   showRecipientId,
   showStalkerId
-} from '../modules/StalkerMessageLogger.js'
-import { antiNsfwStatus, toggleAntiNsfw } from '../apis/antiNsfw.js'
+} from '../modules/stalker-message-logger.js'
+import { antiNsfwStatus, toggleAntiNsfw } from '../apis/anti-nsfw.js'
 
 let messageCommandPrefix = config.prefix
 let isDanbooruEnabled = config.isDanbooruEnabled

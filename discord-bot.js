@@ -1,10 +1,10 @@
 import { Client, GatewayIntentBits } from 'discord.js'
-import { logMessageToLocal } from './modules/LocalMessageLogger.js'
-import { logMessageToChannel } from './modules/ChannelMessageLogger.js'
-import { logToOwner } from './modules/StalkerMessageLogger.js'
-import { messageCommands } from './Commands/MessageCommands.js'
-import { setPresence } from './modules/Presence.js'
-import { checkAttachments } from './apis/antiNsfw.js'
+import { logMessageToLocal } from './modules/local-message-logger.js'
+import { logMessageToChannel } from './modules/channel-message-logger.js'
+import { logToOwner } from './modules/stalker-message-logger.js'
+import { messageCommands } from './Commands/message-commands.js'
+import { setPresence } from './modules/presence-manager.js'
+import { checkAttachments } from './apis/anti-nsfw.js'
 import config from './config/config.json' assert { type: 'json' }
 import keys from './keys.json' assert { type: 'json' }
 
@@ -37,4 +37,4 @@ client.on('messageCreate', async message => {
   checkAttachments(message)
 })
 
-client.login(keys.discordApi)
+client.login(keys.discordKey)

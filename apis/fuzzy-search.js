@@ -4,7 +4,7 @@ import csv from 'csv-parser'
 
 const tagList = []
 
-fs.createReadStream('./apis/all_tags.csv')
+fs.createReadStream('./apis/all-tags.csv')
   .pipe(csv())
   .on('data', row => {
     tagList.push(row.Tag)

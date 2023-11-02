@@ -1,6 +1,6 @@
 import config from '../config/config.json' assert { type: 'json' }
-import { formatLogEmbed } from './LogEmbedFormatter.js'
-import { client } from '../AliceBot.js'
+import { formatLogEmbed } from './log-embed-formatter.js'
+import { client } from '../discord-bot.js'
 
 let isStalkerEnabled = config.isStalkerEnabled
 let stalkerId = config.stalkerId
