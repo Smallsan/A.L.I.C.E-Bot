@@ -71,31 +71,3 @@ And the configure the configs
 
 </h2>
 
-
-
-
-
-
-<style>
-    h2{
-    font-size: 15px;
-    }
-    p1{
-    align
-    font-size: 25px;
-    }
-    p2{
-    font-size: 20px;
-    }
-    .features{
-        font-size: 24px;
-    }
-    .features-list{
-        font-size: 20px;
-    }
-    .runit{
-        font-size: 18px;
-    }
-    </style>
-
-
